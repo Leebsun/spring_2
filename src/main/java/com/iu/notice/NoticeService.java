@@ -2,15 +2,23 @@ package com.iu.notice;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.iu.board.BoardDTO;
 import com.iu.board.BoardService;
 
 public class NoticeService implements BoardService {
 	
+	
+
 	private NoticeDAO noticeDAO;
 	
 	public NoticeService() {
-		noticeDAO = new NoticeDAO();
+		
+	}
+
+	public void setNoticeDAO(NoticeDAO noticeDAO) {
+		this.noticeDAO = noticeDAO;
 	}
 
 	@Override
