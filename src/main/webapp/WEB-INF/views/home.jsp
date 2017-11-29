@@ -13,6 +13,7 @@
 <P>  The time on the server is ${serverTime}. </P>
 
 	<a href="./notice/noticeList">noticeList</a>
+	<a href="./qna/qnaList">qnaList</a>
 
 
 
