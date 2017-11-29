@@ -62,8 +62,9 @@ public class QnaDAO implements BoardDAO {
 		
 		ResultSet rs = st.executeQuery();
 		List<BoardDTO> ar = new ArrayList<BoardDTO>();
+		QnaDTO qnaDTO=null;
 		while(rs.next()) {
-			QnaDTO qnaDTO = new QnaDTO();
+			qnaDTO = new QnaDTO();
 			qnaDTO.setNum(rs.getInt("num"));
 			qnaDTO.setTitle(rs.getString("title"));
 			qnaDTO.setWriter(rs.getString("writer"));
