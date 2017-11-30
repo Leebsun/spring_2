@@ -9,17 +9,18 @@ import java.util.List;
 import com.iu.board.BoardDAO;
 import com.iu.board.BoardDTO;
 import com.iu.util.DBConnector;
-import com.iu.util.MakeRow;
+import com.iu.util.RowNum;
+
 
 public class NoticeDAO implements BoardDAO {
 	//totalCount
 	@Override
-		public int getTotalCount() throws Exception {
+		public int getTotalCount(RowNum rowNum) throws Exception {
 			Connection con = DBConnector.getConnect();
-			String sql = "select nvl(count(num), 0) from notice where "+"?"+" like ?";
+			String sql = "select nvl(count(num), 0) from notice where "+rowNum.getKind()+" like ?";
 			
 			PreparedStatement st = con.prepareStatement(sql);
-			st.setString(1, "%"+""+"%");
+			st.setString(1, "%"+rowNum.getSearch()+"%");
 			ResultSet rs = st.executeQuery();
 			rs.next();
 			int result = rs.getInt(1);
@@ -127,7 +128,7 @@ public class NoticeDAO implements BoardDAO {
 		
 		//list
 		@Override
-		public List<BoardDTO> selectList() throws Exception {
+		public List<BoardDTO> selectList(RowNum rowNum) throws Exception {
 			Connection con = DBConnector.getConnect();
 			
 			List<BoardDTO> ar = new ArrayList<BoardDTO>();
@@ -135,12 +136,13 @@ public class NoticeDAO implements BoardDAO {
 			
 			String sql = "select * from "
 					+ "(select rownum R, N.* from "
-					+ "(select * from notice order by num desc) N)"
+					+ "(select * from notice where "+rowNum.getKind()+" like ? order by num desc) N)"
 					+ "where R between ? and ?";
 			PreparedStatement st = con.prepareStatement(sql);
-		
-			st.setInt(1, 1);
-			st.setInt(2, 10);
+			
+			st.setString(1, "%"+rowNum.getSearch()+"%");
+			st.setInt(2, rowNum.getStartRow());
+			st.setInt(3, rowNum.getLastRow());
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {

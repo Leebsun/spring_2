@@ -2,6 +2,10 @@ package com.iu.board;
 
 import java.util.List;
 
+import org.springframework.ui.Model;
+
+import com.iu.util.ListData;
+
 public interface BoardService {
 	
 	//insert
@@ -17,6 +21,6 @@ public interface BoardService {
 	public BoardDTO selectOne() throws Exception;
 	
 	//selectList
-	public List<BoardDTO> selectList()throws Exception;
+	public List<BoardDTO> selectList(ListData listData,Model model)throws Exception;
 
 }

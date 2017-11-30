@@ -3,13 +3,16 @@ package com.iu.s2;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.iu.board.BoardDTO;
 import com.iu.notice.NoticeService;
+import com.iu.util.ListData;
 
 
 @Controller
@@ -22,18 +25,18 @@ public class NoticeController {
 	
 	
 	@RequestMapping(value="noticeList")
-	public String selectList(Model model){
+	public String selectList(Model model, ListData listData){
+	
 		List<BoardDTO> ar = null;
 		
 		try {
-			ar=noticeService.selectList();
+			noticeService.selectList(listData, model);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("list", ar)
-		.addAttribute("board","notice" );
+		model.addAttribute("board","notice" );
 		
 		
 		return "board/boardList";
