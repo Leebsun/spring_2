@@ -28,8 +28,8 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return noticeDAO.insert(boardDTO);
 	}
 
 	@Override
@@ -45,9 +45,9 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
-	public BoardDTO selectOne() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public BoardDTO selectOne(int num) throws Exception {
+		noticeDAO.hitUpdate(num);
+		return noticeDAO.selectOne(num);
 	}
 
 	@Override

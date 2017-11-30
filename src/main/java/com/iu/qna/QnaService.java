@@ -43,7 +43,7 @@ public class QnaService implements BoardService {
 	}
 
 	@Override
-	public BoardDTO selectOne() throws Exception {
+	public BoardDTO selectOne(int num) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

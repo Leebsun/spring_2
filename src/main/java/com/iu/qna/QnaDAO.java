@@ -63,12 +63,13 @@ public class QnaDAO implements BoardDAO {
 		Connection con = DBConnector.getConnect();
 		String sql ="select * from "
 				+ "(select rownum R, Q.* from "
-				+ "(select * from qna order by ref desc, step asc) Q) "
+				+ "(select * from qna where "+rowNum.getKind()+" like ? order by ref desc, step asc) Q) "
 				+ "where R between ? and ?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, 1);
-		st.setInt(2, 10);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
+		st.setInt(2, rowNum.getStartRow());
+		st.setInt(3, rowNum.getLastRow());
 		
 		ResultSet rs = st.executeQuery();
 		List<BoardDTO> ar = new ArrayList<BoardDTO>();

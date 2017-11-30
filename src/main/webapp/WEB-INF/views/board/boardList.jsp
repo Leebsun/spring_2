@@ -9,6 +9,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		var message='${message}';
+		if(message != ''){
+			alert(message);
+		}
+		
+		
 		
 		$(".list").click(function () {
 			var cur=$(this).attr("title");
@@ -56,7 +62,9 @@
 						<c:forEach begin="1" end="${dto.depth}">
 			--
 			</c:forEach>
-					</c:catch> ${dto.title}</td>
+					</c:catch> 
+					<a href="./${board}View?num=${dto.num}">${dto.title}</a>
+					</td>
 				<td>${dto.writer}</td>
 				<td>${dto.contents}</td>
 				<td>${dto.reg_date}</td>
@@ -80,6 +88,8 @@
 				<span class="list" title="${pager.lastNum+1}">[다음]</span>
 			</c:if>
 	</div>
+	
+	<a href="${board}Write">Write</a>
 
 
 
