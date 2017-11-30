@@ -7,12 +7,15 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<h1>${board}Write</h1>
+		<form action="${board}Write" method="post">
+		<input type="text" name="writer">
+		<input type="text" name="title">
+		<textarea rows="" name="contents" cols=""></textarea>
+		<button>Write</button>
 
-<h1>${board}View</h1>
+		</form>
 
-	<h1>TITLE : ${view.title}</h1>
-	<h1>WRTIER : ${view.writer}</h1>
-	<h1>CONTENTS : ${view.contents}</h1>
 
 </body>
 </html>

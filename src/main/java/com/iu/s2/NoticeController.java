@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.iu.board.BoardDTO;
+import com.iu.notice.NoticeDTO;
 import com.iu.notice.NoticeService;
 import com.iu.util.ListData;
 
@@ -60,15 +63,35 @@ public class NoticeController {
 		return "board/boardView";
 	}
 	
-	@RequestMapping(value="noticeWrite")
-	public String insert(Model model,BoardDTO noticeDTO){
+	@RequestMapping(value="noticeWrite",method=RequestMethod.POST)
+	public String insert(RedirectAttributes rd,NoticeDTO noticeDTO){
+		int result=0;
+		try {
+			result=noticeService.insert(noticeDTO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String message="Fail";
+		if(result>0){
+			message="Success";
+			
+		}
+		rd.addFlashAttribute("message", message);
 		
-		int write= noticeService.insert(noticeDTO);
-		model.addAttribute("write", write);
-		
-		
-		return "board/boardWrite;
+		return "redirect:./noticeList";
 	}
+	
+	@RequestMapping(value="noticeWrite",method=RequestMethod.GET)
+	public String insert(Model model){
+		
+
+			model.addAttribute("board","notice");
+	
+		
+		return "board/boardWrite";
+	}
+	
 	
 	
 	

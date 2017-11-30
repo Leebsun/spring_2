@@ -9,6 +9,12 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		var message='${message}';
+		if(message != ''){
+			alert(message);
+		}
+		
+		
 		
 		$(".list").click(function () {
 			var cur=$(this).attr("title");

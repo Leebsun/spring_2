@@ -28,9 +28,8 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
-		noticeDAO.insert(boardDTO);
-		
-		return 0;
+
+		return noticeDAO.insert(boardDTO);
 	}
 
 	@Override
