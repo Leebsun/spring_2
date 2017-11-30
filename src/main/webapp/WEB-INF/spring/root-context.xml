@@ -6,9 +6,4 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 
 	
-
-	<bean class="com.iu.qna.QnaDAO" name="qnaDAO" />
-	<bean class="com.iu.qna.QnaService" name="qnaService">
-		<property name="qnaDAO" ref="qnaDAO" />
-	</bean>
 </beans>
