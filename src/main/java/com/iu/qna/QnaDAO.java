@@ -9,13 +9,23 @@ import java.util.List;
 import com.iu.board.BoardDAO;
 import com.iu.board.BoardDTO;
 import com.iu.util.DBConnector;
+import com.iu.util.RowNum;
 
 public class QnaDAO implements BoardDAO {
 
 	@Override
-	public int getTotalCount() throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getTotalCount(RowNum rowNum) throws Exception {
+		Connection con = DBConnector.getConnect();
+		String sql = "select nvl(count(num), 0) from qna where "+rowNum.getKind()+" like ?";
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		int result = rs.getInt(1);
+		
+		DBConnector.disConnect(rs, st, con);
+		return result;
 	}
 
 	@Override
@@ -49,16 +59,17 @@ public class QnaDAO implements BoardDAO {
 	}
 
 	@Override
-	public List<BoardDTO> selectList() throws Exception {
+	public List<BoardDTO> selectList(RowNum rowNum) throws Exception {
 		Connection con = DBConnector.getConnect();
 		String sql ="select * from "
 				+ "(select rownum R, Q.* from "
-				+ "(select * from qna order by ref desc, step asc) Q) "
+				+ "(select * from qna where "+rowNum.getKind()+" like ? order by ref desc, step asc) Q) "
 				+ "where R between ? and ?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
-		st.setInt(1, 1);
-		st.setInt(2, 10);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
+		st.setInt(2, rowNum.getStartRow());
+		st.setInt(3, rowNum.getLastRow());
 		
 		ResultSet rs = st.executeQuery();
 		List<BoardDTO> ar = new ArrayList<BoardDTO>();

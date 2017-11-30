@@ -4,8 +4,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.ui.Model;
+
 import com.iu.board.BoardDTO;
 import com.iu.board.BoardService;
+import com.iu.util.ListData;
+import com.iu.util.Pager;
+import com.iu.util.RowNum;
 
 public class NoticeService implements BoardService {
 	
@@ -23,8 +28,8 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return noticeDAO.insert(boardDTO);
 	}
 
 	@Override
@@ -40,17 +45,21 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
-	public BoardDTO selectOne() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public BoardDTO selectOne(int num) throws Exception {
+		noticeDAO.hitUpdate(num);
+		return noticeDAO.selectOne(num);
 	}
 
 	@Override
-	public List<BoardDTO> selectList() throws Exception {
+	public List<BoardDTO> selectList(ListData listData, Model model) throws Exception {
 		
+		RowNum rowNum=listData.makeRow();
+		int totalCount = noticeDAO.getTotalCount(rowNum);
+		Pager pager=listData.makePage(totalCount);
+		model.addAttribute("pager",pager) ;
+		model.addAttribute("list",noticeDAO.selectList(rowNum)) ;
 		
-		
-		return noticeDAO.selectList();
+		return noticeDAO.selectList(rowNum);
 	}
 
 }

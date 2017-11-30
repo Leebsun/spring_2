@@ -9,17 +9,18 @@ import java.util.List;
 import com.iu.board.BoardDAO;
 import com.iu.board.BoardDTO;
 import com.iu.util.DBConnector;
-import com.iu.util.MakeRow;
+import com.iu.util.RowNum;
+
 
 public class NoticeDAO implements BoardDAO {
 	//totalCount
 	@Override
-		public int getTotalCount() throws Exception {
+		public int getTotalCount(RowNum rowNum) throws Exception {
 			Connection con = DBConnector.getConnect();
-			String sql = "select nvl(count(num), 0) from notice where "+"?"+" like ?";
+			String sql = "select nvl(count(num), 0) from notice where "+rowNum.getKind()+" like ?";
 			
 			PreparedStatement st = con.prepareStatement(sql);
-			st.setString(1, "%"+""+"%");
+			st.setString(1, "%"+rowNum.getSearch()+"%");
 			ResultSet rs = st.executeQuery();
 			rs.next();
 			int result = rs.getInt(1);
@@ -78,13 +79,13 @@ public class NoticeDAO implements BoardDAO {
 		
 		//write
 		@Override
-		public int insert(BoardDTO noticeDTO) throws Exception {
+		public int insert(BoardDTO boardDTO) throws Exception {
 			Connection con = DBConnector.getConnect();
 			String sql ="insert into notice values(board_seq.nextval,?,?,?,sysdate,0)";
 			PreparedStatement st = con.prepareStatement(sql);
-			st.setString(1, noticeDTO.getWriter());
-			st.setString(2, noticeDTO.getTitle());
-			st.setString(3, noticeDTO.getContents());
+			st.setString(1, boardDTO.getWriter());
+			st.setString(2, boardDTO.getTitle());
+			st.setString(3, boardDTO.getContents());
 			int result = st.executeUpdate();
 			
 			DBConnector.disConnect(st, con);
@@ -106,28 +107,28 @@ public class NoticeDAO implements BoardDAO {
 			
 			ResultSet rs = st.executeQuery();
 			
-			NoticeDTO noticeDTO=null;
+			BoardDTO boardDTO=null;
 			
 			if(rs.next()) {
-				noticeDTO = new NoticeDTO();
-				noticeDTO.setNum(rs.getInt("num"));
-				noticeDTO.setWriter(rs.getString("writer"));
-				noticeDTO.setTitle(rs.getString("title"));
-				noticeDTO.setContents(rs.getString("contents"));
-				noticeDTO.setReg_date(rs.getDate("reg_date"));
-				noticeDTO.setHit(rs.getInt("hit"));
+				boardDTO = new NoticeDTO();
+				boardDTO.setNum(rs.getInt("num"));
+				boardDTO.setWriter(rs.getString("writer"));
+				boardDTO.setTitle(rs.getString("title"));
+				boardDTO.setContents(rs.getString("contents"));
+				boardDTO.setReg_date(rs.getDate("reg_date"));
+				boardDTO.setHit(rs.getInt("hit"));
 			}
 			
 			DBConnector.disConnect(rs, st, con);
 			
-			return noticeDTO;
+			return boardDTO;
 			
 		}
 		
 		
 		//list
 		@Override
-		public List<BoardDTO> selectList() throws Exception {
+		public List<BoardDTO> selectList(RowNum rowNum) throws Exception {
 			Connection con = DBConnector.getConnect();
 			
 			List<BoardDTO> ar = new ArrayList<BoardDTO>();
@@ -135,12 +136,13 @@ public class NoticeDAO implements BoardDAO {
 			
 			String sql = "select * from "
 					+ "(select rownum R, N.* from "
-					+ "(select * from notice order by num desc) N)"
+					+ "(select * from notice where "+rowNum.getKind()+" like ? order by num desc) N)"
 					+ "where R between ? and ?";
 			PreparedStatement st = con.prepareStatement(sql);
-		
-			st.setInt(1, 1);
-			st.setInt(2, 10);
+			
+			st.setString(1, "%"+rowNum.getSearch()+"%");
+			st.setInt(2, rowNum.getStartRow());
+			st.setInt(3, rowNum.getLastRow());
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
