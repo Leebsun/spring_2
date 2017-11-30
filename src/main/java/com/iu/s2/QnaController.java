@@ -31,7 +31,7 @@ public class QnaController {
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("list", ar).addAttribute("board", "qna");
+		model.addAttribute("board", "qna");
 		
 		
 		return "board/boardList";
