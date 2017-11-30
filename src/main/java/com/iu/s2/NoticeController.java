@@ -42,5 +42,19 @@ public class NoticeController {
 		return "board/boardList";
 		
 	}
-
+	
+	@RequestMapping(value="noticeView")
+	public String selectOne(Model model,int num){
+		
+		try {
+			noticeService.selectOne(num);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("board", "notice");
+		
+		return "board/boardList";
+	}
 }

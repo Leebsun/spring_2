@@ -45,9 +45,12 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
-	public BoardDTO selectOne() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public BoardDTO selectOne(Model model,int num) throws Exception {
+		noticeDAO.hitUpdate(num);
+		
+		model.addAttribute("view", noticeDAO.selectOne(num));
+		
+		return noticeDAO.selectOne(num);
 	}
 
 	@Override
