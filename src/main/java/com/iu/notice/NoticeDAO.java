@@ -107,21 +107,21 @@ public class NoticeDAO implements BoardDAO {
 			
 			ResultSet rs = st.executeQuery();
 			
-			NoticeDTO noticeDTO=null;
+			BoardDTO boardDTO=null;
 			
 			if(rs.next()) {
-				noticeDTO = new NoticeDTO();
-				noticeDTO.setNum(rs.getInt("num"));
-				noticeDTO.setWriter(rs.getString("writer"));
-				noticeDTO.setTitle(rs.getString("title"));
-				noticeDTO.setContents(rs.getString("contents"));
-				noticeDTO.setReg_date(rs.getDate("reg_date"));
-				noticeDTO.setHit(rs.getInt("hit"));
+				boardDTO = new NoticeDTO();
+				boardDTO.setNum(rs.getInt("num"));
+				boardDTO.setWriter(rs.getString("writer"));
+				boardDTO.setTitle(rs.getString("title"));
+				boardDTO.setContents(rs.getString("contents"));
+				boardDTO.setReg_date(rs.getDate("reg_date"));
+				boardDTO.setHit(rs.getInt("hit"));
 			}
 			
 			DBConnector.disConnect(rs, st, con);
 			
-			return noticeDTO;
+			return boardDTO;
 			
 		}
 		

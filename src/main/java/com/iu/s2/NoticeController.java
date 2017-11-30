@@ -44,17 +44,35 @@ public class NoticeController {
 	}
 	
 	@RequestMapping(value="noticeView")
-	public String selectOne(Model model,int num){
+	public String selectOne(Model model, @RequestParam(defaultValue="0",required=false) int num){
 		
 		try {
-			noticeService.selectOne(num);
+			BoardDTO boardDTO=noticeService.selectOne(num);
+			model.addAttribute("view", boardDTO);
+			model.addAttribute("board", "notice");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("board", "notice");
 		
-		return "board/boardList";
+		
+		return "board/boardView";
 	}
+	
+	@RequestMapping(value="noticeWrite")
+	public String insert(Model model,BoardDTO noticeDTO){
+		
+		int write= noticeService.insert(noticeDTO);
+		model.addAttribute("write", write);
+		
+		
+		return "board/boardWrite;
+	}
+	
+	
+	
+	
+	
+	
 }

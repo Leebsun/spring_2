@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<h1>TITLE : ${view.title}</h1>
+	<h1>WRTIER : ${view.writer}</h1>
+	<h1>CONTENTS : ${view.contents}</h1>
 
 </body>
 </html>

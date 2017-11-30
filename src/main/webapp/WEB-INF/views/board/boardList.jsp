@@ -82,6 +82,8 @@
 				<span class="list" title="${pager.lastNum+1}">[다음]</span>
 			</c:if>
 	</div>
+	
+	<a href="${board}Write">Write</a>
 
 
 
