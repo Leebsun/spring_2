@@ -1,9 +1,13 @@
 package com.iu.notice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.iu.board.BoardDTO;
@@ -12,23 +16,15 @@ import com.iu.util.ListData;
 import com.iu.util.Pager;
 import com.iu.util.RowNum;
 
+@Service
 public class NoticeService implements BoardService {
-	
-	
 
+	@Autowired
 	private NoticeDAO noticeDAO;
-	
-	public NoticeService() {
-		
-	}
-
-	public void setNoticeDAO(NoticeDAO noticeDAO) {
-		this.noticeDAO = noticeDAO;
-	}
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
-
+		// TODO Auto-generated method stub
 		return noticeDAO.insert(boardDTO);
 	}
 
@@ -46,20 +42,20 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public BoardDTO selectOne(int num) throws Exception {
+		// TODO Auto-generated method stub
 		noticeDAO.hitUpdate(num);
 		return noticeDAO.selectOne(num);
 	}
 
 	@Override
-	public List<BoardDTO> selectList(ListData listData, Model model) throws Exception {
+	public void selectList(ListData listData, Model model) throws Exception {
+		// TODO Auto-generated method stub
 		
-		RowNum rowNum=listData.makeRow();
-		int totalCount = noticeDAO.getTotalCount(rowNum);
-		Pager pager=listData.makePage(totalCount);
-		model.addAttribute("pager",pager) ;
-		model.addAttribute("list",noticeDAO.selectList(rowNum)) ;
-		
-		return noticeDAO.selectList(rowNum);
+		//?섏씠吏?
+		RowNum rowNum = listData.makeRow();
+		Pager pager = listData.makePage(noticeDAO.getTotalCount(rowNum));
+		model.addAttribute("list", noticeDAO.selectList(rowNum));
+		model.addAttribute("pager", pager);
 	}
 
 }
