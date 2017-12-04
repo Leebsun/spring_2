@@ -1,6 +1,7 @@
 package com.iu.s2;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,9 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.iu.board.BoardDTO;
+import com.iu.notice.NoticeDTO;
 import com.iu.notice.NoticeService;
 import com.iu.util.ListData;
 
@@ -58,10 +61,10 @@ public class NoticeController {
 	}
 	
 	@RequestMapping(value="noticeWrite", method={RequestMethod.POST})
-	public String insert(RedirectAttributes rd, BoardDTO boardDTO){
+	public String insert(RedirectAttributes rd, NoticeDTO boardDTO, HttpSession session){
 		int result = 0;
 		try {
-			result = noticeService.insert(boardDTO);
+			result = noticeService.insert(boardDTO,session);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

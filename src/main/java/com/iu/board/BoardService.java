@@ -2,6 +2,8 @@ package com.iu.board;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.ui.Model;
 
 import com.iu.util.ListData;
@@ -9,7 +11,7 @@ import com.iu.util.ListData;
 public interface BoardService {
 
 	//insert
-	public int insert(BoardDTO boardDTO) throws Exception;
+	public int insert(BoardDTO boardDTO,HttpSession session) throws Exception;
 	
 	//update
 	public int update(BoardDTO boardDTO) throws Exception;

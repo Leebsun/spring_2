@@ -16,17 +16,30 @@ import com.iu.util.RowNum;
 
 @Repository
 public class NoticeDAO implements BoardDAO{
+	
+	public int getNum() throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql="select board_seq.nextval from dual";
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet rs= st.executeQuery();
+		rs.next();
+		int num = rs.getInt(1);
+		DBConnector.disConnect(con, st, rs);
+		
+		return num;
+	}
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
 		Connection con = DBConnector.getConnect();
-		String sql = "insert into notice values(board_seq.nextval,?,?,?,sysdate,0)";
+		String sql = "insert into notice values(?,?,?,?,sysdate,0)";
 		PreparedStatement st = con.prepareStatement(sql);
 		
-		st.setString(1, boardDTO.getWriter());
-		st.setString(2, boardDTO.getTitle());
-		st.setString(3, boardDTO.getContents());
+		st.setInt(1, boardDTO.getNum());
+		st.setString(2, boardDTO.getWriter());
+		st.setString(3, boardDTO.getTitle());
+		st.setString(4, boardDTO.getContents());
 		
 		int result = st.executeUpdate();
 		
