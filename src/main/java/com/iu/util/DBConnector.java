@@ -6,19 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class DBConnector {
-<<<<<<< HEAD
-	
-	
-	public static Connection getConnect() throws Exception {
-	
-	    String user = "user01";
-	    String password = "user01";
-	    String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	    String driver = "oracle.jdbc.driver.OracleDriver";
-	
-	    Class.forName(driver);
-=======
->>>>>>> master
 
 	public static Connection getConnect() throws Exception{
 		String user = "user02";
