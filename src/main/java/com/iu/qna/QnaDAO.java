@@ -18,17 +18,31 @@ import oracle.jdbc.proxy.annotation.Pre;
 
 @Repository
 public class QnaDAO implements BoardDAO {
+	
+	public int getNum() throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql="select board_seq.nextval from dual";
+		PreparedStatement st = con.prepareStatement(sql);
+		ResultSet rs= st.executeQuery();
+		rs.next();
+		int num = rs.getInt(1);
+		DBConnector.disConnect(con, st, rs);
+		
+		return num;
+	}
+
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
 		Connection con = DBConnector.getConnect();
-		String sql = "insert into qna values(board_seq.nextval,?,?,?,sysdate,0,board_seq.currval,0,0)";
+		String sql = "insert into qna values(?,?,?,?,sysdate,0,board_seq.currval,0,0)";
 		PreparedStatement st = con.prepareStatement(sql);
 		
-		st.setString(1, boardDTO.getTitle());
-		st.setString(2, boardDTO.getWriter());
-		st.setString(3, boardDTO.getContents());
+		st.setInt(1, boardDTO.getNum());
+		st.setString(2, boardDTO.getTitle());
+		st.setString(3, boardDTO.getWriter());
+		st.setString(4, boardDTO.getContents());
 		
 		int result = st.executeUpdate();
 		
@@ -40,14 +54,35 @@ public class QnaDAO implements BoardDAO {
 	@Override
 	public int update(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
+		Connection con = DBConnector.getConnect();
+		String sql = "update qna set title=?, contents=? where num=?";
+		PreparedStatement st = con.prepareStatement(sql);
 		
-		return 0;
+		st.setString(1, boardDTO.getTitle());
+		st.setString(2, boardDTO.getContents());
+		st.setInt(3, boardDTO.getNum());
+		
+		int result = st.executeUpdate();
+		
+		DBConnector.disConnect(con, st);
+		
+		return result;
 	}
 
 	@Override
 	public int delete(int num) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		Connection con = DBConnector.getConnect();
+		String sql = "delete qna where num=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		st.setInt(1, num);
+		
+		int result = st.executeUpdate();
+		
+		DBConnector.disConnect(con, st);
+		
+		return result;
 	}
 
 	@Override
