@@ -24,22 +24,71 @@ public class NoticeController {
 	@Autowired
 	private NoticeService noticeService;
 
-	@RequestMapping(value="noticeList")
-	public String selectList(Model model, ListData listData){
-		
+	@RequestMapping(value="noticeUpdate", method=RequestMethod.POST)
+	public String update(NoticeDTO noticeDTO, RedirectAttributes rd, HttpSession session){
+		String message="Fail";
+		try{
+			int result=noticeService.update(noticeDTO, session);
+			if(result>0){
+				message="Success";
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		rd.addFlashAttribute("message", message);
+		return "redirect:noticeList";
+	}
+
+	@RequestMapping(value="noticeUpdate", method=RequestMethod.GET)
+	public String update(int num, Model model){
 		try {
-			noticeService.selectList(listData, model);
-			
-			model.addAttribute("board", "notice");
-			
+			BoardDTO boardDTO=noticeService.selectOne(num);
+			model.addAttribute("view", boardDTO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		model.addAttribute("board", "notice");
+		return "board/boardUpdate";
+	}
+
+
+	@RequestMapping(value="noticeDelete")
+	public String delete(int num, RedirectAttributes rd, HttpSession session){
+		int result=0;
+		try {
+			result = noticeService.delete(num, session);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String message="Fail";
+		if(result>0){
+			message="Success";
+		}
+
+		rd.addFlashAttribute("message", message);
+
+		return "redirect:./noticeList";
+	}
+
+
+	@RequestMapping(value="noticeList")
+	public String selectList(Model model, ListData listData){
+
+		try {
+			noticeService.selectList(listData, model);
+
+			model.addAttribute("board", "notice");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return "board/boardList";
 	}
-	
+
 	@RequestMapping(value="noticeView")
 	public String selectOne(Model model, @RequestParam(defaultValue="0",required=false)int num){
 		try {
@@ -50,21 +99,21 @@ public class NoticeController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return "board/boardView";
 	}
-	
+
 	@RequestMapping(value="noticeWrite", method={RequestMethod.GET})
 	public String insert(Model model){
 		model.addAttribute("board", "notice");
 		return "board/boardWrite";
 	}
-	
+
 	@RequestMapping(value="noticeWrite", method={RequestMethod.POST})
 	public String insert(RedirectAttributes rd, NoticeDTO boardDTO, HttpSession session){
 		int result = 0;
 		try {
-			result = noticeService.insert(boardDTO,session);
+			result = noticeService.insert(boardDTO, session);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +123,7 @@ public class NoticeController {
 			message="Success";
 		}
 		rd.addFlashAttribute("message", message);
-		
+
 		return "redirect:./noticeList";
 	}
 }

@@ -8,9 +8,11 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+@Component
 public class FileSaver {
 	//3. FileCopyUtils 
 	public String save3(String filePath, MultipartFile multipartFile)throws Exception{
