@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class DBConnector {
+<<<<<<< HEAD
 	
 	
 	public static Connection getConnect() throws Exception {
@@ -16,31 +17,28 @@ public class DBConnector {
 	    String driver = "oracle.jdbc.driver.OracleDriver";
 	
 	    Class.forName(driver);
+=======
+>>>>>>> master
 
-	    Connection con = DriverManager.getConnection(url, user, password);
-	    
-	    return con;
+	public static Connection getConnect() throws Exception{
+		String user = "user01";
+		String password = "user01";
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		
+		Class.forName(driver);
+		Connection con = DriverManager.getConnection(url, user, password);
+		
+		return con;
 	}
 	
-	public static void disConnect(ResultSet rs, PreparedStatement st, Connection con) throws Exception {
+	public static void disConnect(Connection con, PreparedStatement st) throws Exception{
+		st.close();
+		con.close();
+	}
+	
+	public static void disConnect(Connection con, PreparedStatement st, ResultSet rs) throws Exception{
 		rs.close();
-		st.close();
-		con.close();
+		DBConnector.disConnect(con, st);
 	}
-	
-	public static void disConnect(PreparedStatement st, Connection con) throws Exception {
-		st.close();
-		con.close();
-	}
-
 }
-
-
-
-
-
-
-
-
-
-
