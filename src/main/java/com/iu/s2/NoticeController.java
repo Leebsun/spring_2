@@ -23,6 +23,40 @@ public class NoticeController {
 
 	@Autowired
 	private NoticeService noticeService;
+	
+	@RequestMapping(value="noticeUpdate",method=RequestMethod.GET)
+	public String update(int num,Model model){
+		try {
+			BoardDTO boardDTO=noticeService.selectOne(num);
+		    model.addAttribute("view", boardDTO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("board", "notice");
+		return "board/boardUpdate";
+		
+		
+	}
+	
+	@RequestMapping(value="noticeDelete")
+	public String delete(int num,RedirectAttributes rd,HttpSession session){
+		int result=0;
+		try {
+			result=noticeService.delete(num,session);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String message="Fail";
+		if(result>0){
+			message="Success";
+		}
+		
+		rd.addFlashAttribute("message",message);
+		
+		return "redirect:./noticeList";
+	}
 
 	@RequestMapping(value="noticeList")
 	public String selectList(Model model, ListData listData){

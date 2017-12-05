@@ -1,5 +1,6 @@
 package com.iu.notice;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,17 +31,15 @@ public class NoticeService implements BoardService {
 	private FileDAO fileDAO;
 
 	@Override
-	public int insert(BoardDTO boardDTO,HttpSession session) throws Exception {
+	public int insert(BoardDTO boardDTO, HttpSession session) throws Exception {
 		int num = noticeDAO.getNum();
 		String filePath = session.getServletContext().getRealPath("resources/upload");
 		ArrayList<FileDTO> names=new ArrayList<FileDTO>();
-		
 		FileSaver fileSaver = new FileSaver();
 		FileDTO fileDTO=null;
 		for(MultipartFile f: ((NoticeDTO)boardDTO).getF1()){
 			fileDTO = new FileDTO();
-			
-			fileDTO.setFilename(fileSaver.save2(filePath,f));
+			fileDTO.setFilename(fileSaver.save2(filePath, f));
 			fileDTO.setOriname(f.getOriginalFilename());
 			fileDTO.setNum(num);
 			names.add(fileDTO);
@@ -48,7 +47,7 @@ public class NoticeService implements BoardService {
 		}
 		
 		boardDTO.setNum(num);
-
+		
 		return noticeDAO.insert(boardDTO);
 	}
 
@@ -59,23 +58,36 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
-	public int delete(int num) throws Exception {
+	public int delete(int num, HttpSession session) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		int result=noticeDAO.delete(num);
+		List<FileDTO> ar = fileDAO.selectList(num);
+		fileDAO.delete(num);
+		String filePath = session.getServletContext().getRealPath("resources/upload");
+		
+		for(FileDTO fileDTO : ar){
+			File file = new File(filePath, fileDTO.getFilename());
+			file.delete();
+		}
+		
+		return result;
 	}
 
 	@Override
 	public BoardDTO selectOne(int num) throws Exception {
 		// TODO Auto-generated method stub
 		noticeDAO.hitUpdate(num);
-		return noticeDAO.selectOne(num);
+		NoticeDTO noticeDTO = (NoticeDTO)noticeDAO.selectOne(num); 
+		List<FileDTO> ar=fileDAO.selectList(num);
+		noticeDTO.setAr(ar);
+		return noticeDTO;
 	}
 
 	@Override
 	public void selectList(ListData listData, Model model) throws Exception {
 		// TODO Auto-generated method stub
 		
-		//?섏씠吏?
+		//페이징
 		RowNum rowNum = listData.makeRow();
 		Pager pager = listData.makePage(noticeDAO.getTotalCount(rowNum));
 		model.addAttribute("list", noticeDAO.selectList(rowNum));
