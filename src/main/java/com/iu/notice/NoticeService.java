@@ -29,13 +29,15 @@ public class NoticeService implements BoardService {
 	private NoticeDAO noticeDAO;
 	@Inject
 	private FileDAO fileDAO;
+	@Inject
+	private FileSaver fileSaver;
 
 	@Override
 	public int insert(BoardDTO boardDTO, HttpSession session) throws Exception {
 		int num = noticeDAO.getNum();
 		String filePath = session.getServletContext().getRealPath("resources/upload");
 		ArrayList<FileDTO> names=new ArrayList<FileDTO>();
-		FileSaver fileSaver = new FileSaver();
+		
 		FileDTO fileDTO=null;
 		for(MultipartFile f: ((NoticeDTO)boardDTO).getF1()){
 			fileDTO = new FileDTO();
@@ -52,20 +54,32 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
-	public int update(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(BoardDTO boardDTO,HttpSession session) throws Exception {
+		int result=noticeDAO.update(boardDTO);
+		MultipartFile [] ar = ((NoticeDTO)boardDTO).getF1();
+		for(MultipartFile f : ar){
+			FileDTO fileDTO = new FileDTO();
+			fileDTO.setNum(boardDTO.getNum());
+			
+			String filePath=session.getServletContext().getRealPath("resources/upload");
+			String fileName=fileSaver.save1(filePath, f);
+			fileDTO.setFilename(fileName);
+			fileDTO.setOriname(f.getOriginalFilename());
+			fileDAO.insert(fileDTO);
+		}
+		
+		return result;
 	}
 
 	@Override
 	public int delete(int num, HttpSession session) throws Exception {
-		// TODO Auto-generated method stub
+		
 		int result=noticeDAO.delete(num);
 		List<FileDTO> ar = fileDAO.selectList(num);
 		fileDAO.delete(num);
 		String filePath = session.getServletContext().getRealPath("resources/upload");
 		
-		for(FileDTO fileDTO : ar){
+		for(FileDTO fileDTO: ar){
 			File file = new File(filePath, fileDTO.getFilename());
 			file.delete();
 		}

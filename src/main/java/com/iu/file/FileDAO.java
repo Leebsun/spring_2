@@ -12,6 +12,42 @@ import com.iu.util.DBConnector;
 
 @Repository
 public class FileDAO {
+/*	//update
+	public int update(FileDTO fileDTO) throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql="update upload set num=?,filename=?,oriname=?";
+		PreparedStatement statement = con.prepareStatement(sql);
+		
+	}*/
+	
+	//delete one
+	public String selectOne(int fnum)throws Exception{
+		Connection con = DBConnector.getConnect();
+		String sql="select filename from upload where fnum=?";
+		PreparedStatement st= con.prepareStatement(sql);
+		st.setInt(1, fnum);
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		
+		String fileName=rs.getString(1);
+		
+		DBConnector.disConnect(con, st, rs);
+		
+		return fileName;
+		
+	}
+	public int deleteOne(int fnum)throws Exception{
+		Connection con =DBConnector.getConnect();
+		String sql="delete upload where fnum=?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, fnum);
+		int result = st.executeUpdate();
+		
+		DBConnector.disConnect(con, st);
+		
+		return result;
+	}
+	
 	//delete
 	public int delete(int num) throws Exception{
 		Connection con = DBConnector.getConnect();

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +12,23 @@
 <script src="../resources/SE2/js/HuskyEZCreator.js"></script>
 <script type="text/javascript">
 	$(function() {
+		//파일첨부 5개
+		var index = ${view.ar.size()};
+		var count = 0;
+		//delete
+		$(".del").click(function() {
+			var fnum = $(this).attr("title");
+			$.post("../util/fileDelete",{fnum:fnum},function(data){
+				alert(data.trim());
+				$("#del"+fnum).remove();
+				index--;
+			});
+			
+			
+		});
+		
+		
+		
 		//SmartEditor start 
 		var editor_object = [];
 
@@ -33,7 +50,7 @@
 
 		//전송버튼 클릭이벤트
 		$("#savebutton").click(
-				function() {
+		function() {
 					//id가 smarteditor인 textarea에 에디터에서 대입
 					editor_object.getById["contents"].exec(
 							"UPDATE_CONTENTS_FIELD", []);
@@ -46,8 +63,7 @@
 
 		//SmartEditor end
 		//CKEDITOR.replace( 'contents' );
-		var index = 0;
-		var count = 0;
+		
 		$("#add")
 				.click(
 						function() {
@@ -116,7 +132,8 @@ input {
 <body>
 	<h1>${board}Update Form</h1>
 
-	<form id="frm" action="${board}Update" method="post" enctype="Multipart/form-data">
+	<form id="frm" action="${board}Update" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="num" value="${view.num}">
 		<table>
 			<tr>
 				<td><input type="text" name="title" value="${view.title}"></td>
@@ -129,21 +146,21 @@ input {
 			</tr>
 			
 			<c:forEach items="${view.ar}" var="file">
-				<tr>
-			<td class="content" colspan="2">${file.oriname}<input type="button" value="X"></td>
-			</tr>
+				<tr id="del${file.fnum}">
+					<td class="content" colspan="2">${file.oriname}<input type="button" title="${file.fnum}" class="del" value="X"></td>
+				</tr>
 			</c:forEach>
-		
 			
 		</table>
+
 		
-		
+
 
 		<input type="button" value="File Add" id="add">
 		<div id="files"></div>
 
 
-		<input type="button" id="savebutton" value="Write">
+		<input type="button" id="savebutton" value="Update">
 	</form>
 </body>
 </html>

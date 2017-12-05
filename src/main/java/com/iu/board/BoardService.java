@@ -14,7 +14,7 @@ public interface BoardService {
 	public int insert(BoardDTO boardDTO,HttpSession session) throws Exception;
 	
 	//update
-	public int update(BoardDTO boardDTO) throws Exception;
+	public int update(BoardDTO boardDTO,HttpSession session) throws Exception;
 	
 	//delete
 	public int delete(int num,HttpSession session) throws Exception;
