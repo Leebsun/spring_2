@@ -45,7 +45,7 @@ td{
 	</table>
 	
 	<c:forEach items="${view.ar}" var="file">
-		<a href="../resources/upload/${file.filename}">${file.oriname}</a>
+		<a href="../util/download?filename=${file.filename}&oriname=${file.oriname}">${file.oriname}</a>
 	</c:forEach>	
 	
 	<a href="./${board}Update?num=${view.num}">Update</a>
