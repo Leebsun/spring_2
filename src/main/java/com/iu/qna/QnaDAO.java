@@ -36,13 +36,14 @@ public class QnaDAO implements BoardDAO {
 	public int insert(BoardDTO boardDTO) throws Exception {
 		// TODO Auto-generated method stub
 		Connection con = DBConnector.getConnect();
-		String sql = "insert into qna values(?,?,?,?,sysdate,0,board_seq.currval,0,0)";
+		String sql = "insert into qna values(?,?,?,?,sysdate,0,?,0,0)";
 		PreparedStatement st = con.prepareStatement(sql);
 		
 		st.setInt(1, boardDTO.getNum());
 		st.setString(2, boardDTO.getTitle());
 		st.setString(3, boardDTO.getWriter());
 		st.setString(4, boardDTO.getContents());
+		st.setInt(5, boardDTO.getNum());
 		
 		int result = st.executeUpdate();
 		
