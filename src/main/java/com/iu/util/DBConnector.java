@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 public class DBConnector {
 
 	public static Connection getConnect() throws Exception{
-		String user = "user01";
-		String password = "user01";
+		String user = "user02";
+		String password = "user02";
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		
