@@ -27,6 +27,5 @@ public class MemberService {
 		
 	}
 	
-	public
 
 }
